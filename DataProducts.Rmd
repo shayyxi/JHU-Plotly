@@ -1,0 +1,103 @@
+---
+title: "Plotly Assignment"
+author: "Shazi"
+date: "7/19/2020"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Plotly Boxplot Code
+
+```{r cars, echo = TRUE, message=FALSE}
+library(plotly)
+library(webshot)
+data(mtcars)
+fig <- plot_ly(y = mtcars$mpg, x = mtcars$cyl, type = "box", 
+               boxpoints = "all")
+f <- list(family = "Courier New, monospace",
+          size = 18,
+          color = "#7f7f7f"
+)
+x <- list(title = "Cylinders",
+      titlefont = f
+)
+y <- list(title = "MPG",
+          titlefont = f
+)
+fig <- fig %>% layout(xaxis=x,yaxis=y)
+```
+
+## Boxplot of Cylinder vs MPG
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+fig
+```
+
+The plot above shows the MPG rating of the cars depending on their cylinder numbers. It can be observed that cars with the lower number of cylinders are giving better MPG. 
+
+## Time-Series Line Plot Code
+
+```{r message=FALSE, warning=FALSE, echo=TRUE}
+t <- as.data.frame(EuStockMarkets)
+t1 <- as.ts(t$DAX)
+t2 <- as.ts(t$SMI)
+t3 <- as.ts(t$CAC)
+t4 <- as.ts(t$FTSE)
+fig <- plot_ly(y=~t1,name='DAX',type='scatter',mode='lines')
+fig <- fig %>% add_trace(y=~t2,name='SMI',type='scatter',mode='lines')
+fig <- fig %>% add_trace(y=~t3,name='CAC',type='scatter',mode='lines')
+fig <- fig %>% add_trace(y=~t4,name='FTSE',type='scatter',mode='lines')
+f <- list(family = "Courier New, monospace",size = 18,color = "#7f7f7f")
+x <- list(title = "Time",titlefont = f)
+y <- list(title = "Closing Price",titlefont = f)
+fig <- fig %>% layout(xaxis=x,yaxis=y)
+```
+In this code, we are taking a stock market dataset. We are generating a time-series plot of the closing price of the four indices.  
+
+## Time-Series Line Plot
+
+```{r echo=FALSE}
+fig
+```
+
+## Bar Chart Code
+
+```{r message=FALSE, warning=FALSE, echo=TRUE}
+a <- ToothGrowth
+p1 <- subset(a,supp=="VC")
+p2 <- subset(a,supp=="OJ")
+df <- data.frame(type=c("VC","OJ"),len=c(mean(p1$len),mean(p2$len)),
+                 dose=c(mean(p1$dose),mean(p2$dose)))
+fig <- plot_ly(y=~df$len,x=~df$type,type="bar",name="Length")
+fig <- fig %>% add_trace(y=~df$dose,name="Dose")
+fig <- fig %>% layout(yaxis = list(title = 'Count'),
+                      xaxis = list(title="Type") ,barmode = 'group')
+```
+The code will generate a grouped bar chart. 
+
+## Bar Chart Plot
+
+```{r echo=FALSE}
+fig
+```
+
+## Bubble Plot Code 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(gapminder)
+a <- gapminder
+a <- subset(a,year==2007)
+a$pop <- (a$pop-mean(a$pop))/sd(a$pop)
+a$pop <- abs(a$pop)
+fig <- plot_ly(a,y=~lifeExp,x=~gdpPercap,text=~country,type='scatter',
+               mode='markers',marker=list(size=a$pop*20,opacity=0.5))
+```
+This is the code for bubble plot. You need to install gapminder package to access the dataset. We are making a bubble plot of life expectancy and GDP per capita. The bubble size depends on the population. We have scaled the population. 
+
+## Bubble Plot
+
+```{r echo=FALSE}
+fig
+```
